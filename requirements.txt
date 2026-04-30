@@ -4,3 +4,5 @@ gql>=3.4,<4.0
 keyring>=24.0.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
+# Transitive dep pinned for security: GHSA-63hf-3vf5-4wqf (aiohttp <3.13.4)
+aiohttp>=3.13.4
