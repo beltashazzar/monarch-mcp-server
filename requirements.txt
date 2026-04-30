@@ -1,8 +1,13 @@
-mcp[cli]>=1.0.0
+mcp[cli]>=1.10.0
 monarchmoney>=0.1.15
 gql>=3.4,<4.0
 keyring>=24.0.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
-# Transitive dep pinned for security: GHSA-63hf-3vf5-4wqf (aiohttp <3.13.4)
-aiohttp>=3.13.4
+# Security floors — pinned to avoid OSV findings for transitive deps. Keep
+# in sync with uv.lock when tightening constraints.
+aiohttp>=3.13.4         # GHSA-63hf-3vf5-4wqf (CRITICAL)
+starlette>=0.49.1       # GHSA-7f5h-v6xp-fcq8 / GHSA-f96h-pmfr-66vw
+python-multipart>=0.0.22  # GHSA-wp53-j4wj-2cfg / GHSA-59g5-xgcq-4qw3
+cryptography>=46.0.5    # GHSA-r6ph-v2qm-q3c2
+jaraco-context>=6.1.0   # GHSA-58pv-8j8x-9vj2
