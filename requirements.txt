@@ -9,5 +9,5 @@ pydantic>=2.0.0
 aiohttp>=3.13.4         # GHSA-63hf-3vf5-4wqf (CRITICAL)
 starlette>=0.49.1       # GHSA-7f5h-v6xp-fcq8 / GHSA-f96h-pmfr-66vw
 python-multipart>=0.0.22  # GHSA-wp53-j4wj-2cfg / GHSA-59g5-xgcq-4qw3
-cryptography>=46.0.5    # GHSA-r6ph-v2qm-q3c2
+cryptography>=46.0.7    # GHSA-r6ph-v2qm-q3c2, GHSA-p423-j2cm-9vmq / PYSEC-2026-36
 jaraco-context>=6.1.0   # GHSA-58pv-8j8x-9vj2
