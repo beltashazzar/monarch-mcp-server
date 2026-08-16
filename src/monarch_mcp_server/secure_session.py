@@ -90,9 +90,12 @@ class SecureMonarchSession:
         if _TOKEN_FILE.is_file():
             _TOKEN_FILE.unlink()
             logger.info(f"🗑️ Token file deleted: {_TOKEN_FILE}")
-        # Remove directory if empty
-        if _TOKEN_DIR.is_dir() and not list(_TOKEN_DIR.iterdir()):
-            _TOKEN_DIR.rmdir()
+        # The directory is deliberately left in place. Removing it and letting the next
+        # save re-create it changes the inode, which silently breaks anything bound to
+        # the old one -- a docker bind mount of this directory ends up pointing at
+        # `<path>//deleted` and reads as empty forever, so a container sharing the
+        # session sees "no stored session" while the host is authenticated. An empty
+        # 0700 directory costs nothing; it is also not ours to delete.
 
     # -- public API ----------------------------------------------------------
 
