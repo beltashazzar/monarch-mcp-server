@@ -18,14 +18,14 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
-    "mcp[cli]>=1.0.0",
-    "monarchmoneycommunity",
+    "mcp[cli]>=1.10.0",
+    "monarchmoneycommunity>=1.4.0",
+    "gql>=3.4",
     "keyring>=24.0.0",
     "python-dotenv>=1.0.0",
     "pydantic>=2.0.0",
-    "asyncio>=3.4.3",
 ]
 
 [project.optional-dependencies]
