@@ -1,6 +1,12 @@
-mcp[cli]>=1.10.0
+# Upper bound is load-bearing: mcp 2.0.0 removed mcp.server.fastmcp (it became
+# mcp.server.mcpserver), and app.py imports FastMCP from it. Upstream's pin is
+# open-ended, so a fresh install there breaks on import. Lift only together with
+# a port to the 2.x API.
+mcp[cli]>=1.10.0,<2
 monarchmoneycommunity>=1.4.0
 gql>=3.4
 keyring>=24.0.0
 python-dotenv>=1.0.0
 pydantic>=2.0.0
+# transitive floor — idna DoS (GHSA-65pc-fj4g-8rjx) via httpx
+idna>=3.15
