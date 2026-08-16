@@ -1,0 +1,89 @@
+# Which Monarch MCP tools are exposed to the model.
+#
+# true  = registered and offered to the LLM
+# false = withheld; never advertised, not callable even by name
+#
+# Anything absent from this file is withheld, so a tool upstream adds later stays hidden
+# until you list it. That is deliberate — see src/monarch_mcp_server/read_only.py.
+#
+# The 20 tools marked WRITE mutate a real financial account. They ship disabled. Turn one
+# on at a time and restart the server; the startup log reports exactly what registered.
+#
+# Edit the copy this server actually loads, not this one, if MONARCH_TOOLS_CONFIG points
+# elsewhere — that indirection exists so toggling a tool never dirties the git checkout.
+# Verified against upstream ca6c159.
+
+[tools]
+
+# ── accounts ────────────────────────────────────────────────────────────────────
+get_accounts                   = true
+get_account_holdings           = true
+get_account_balance_history    = true
+# Asks Monarch to re-sync from your institutions. A side effect, but it edits no
+# record and moves no money, so it ships enabled.
+refresh_accounts               = true
+upload_account_balance_history = false  # WRITE — overwrites balance history
+
+# ── auth (local keyring/session state only; never touches the account) ───────────
+setup_authentication           = true
+monarch_login                  = true
+monarch_login_with_token       = true
+monarch_logout                 = true
+check_auth_status              = true
+debug_session_loading          = true
+
+# ── transactions ────────────────────────────────────────────────────────────────
+get_transactions               = true
+search_transactions            = true
+get_transaction_details        = true
+get_recurring_transactions     = true
+get_transactions_needing_review = true
+create_transaction             = false  # WRITE
+update_transaction             = false  # WRITE
+delete_transaction             = false  # WRITE
+categorize_transaction         = false  # WRITE — reads as a query, calls update_transaction
+update_transaction_notes       = false  # WRITE
+mark_transaction_reviewed      = false  # WRITE — reads as a query, calls update_transaction
+bulk_categorize_transactions   = false  # WRITE — one call, many rows
+
+# ── summaries ───────────────────────────────────────────────────────────────────
+get_transactions_summary       = true
+get_spending_summary           = true
+
+# ── financial ───────────────────────────────────────────────────────────────────
+get_cashflow                   = true
+get_net_worth                  = true
+get_net_worth_by_account_type  = true
+
+# ── budgets ─────────────────────────────────────────────────────────────────────
+get_budgets                    = true
+set_budget_amount              = false  # WRITE
+
+# ── categories ──────────────────────────────────────────────────────────────────
+get_transaction_categories     = true
+get_transaction_category_groups = true
+get_category_details           = true
+get_cashflow_by_month          = true
+create_transaction_category    = false  # WRITE
+update_category                = false  # WRITE — mutates via raw GraphQL
+
+# ── tags ────────────────────────────────────────────────────────────────────────
+get_transaction_tags           = true
+create_transaction_tag         = false  # WRITE
+set_transaction_tags           = false  # WRITE — replaces a transaction's whole tag set
+add_transaction_tag            = false  # WRITE — also calls set_transaction_tags
+
+# ── splits ──────────────────────────────────────────────────────────────────────
+get_transaction_splits         = true
+split_transaction              = false  # WRITE — reads as a query, calls update_transaction_splits
+
+# ── rules (auto-categorization; a rule can rewrite future transactions in bulk) ──
+get_transaction_rules          = true
+create_transaction_rule        = false  # WRITE — mutates via raw GraphQL
+update_transaction_rule        = false  # WRITE — mutates via raw GraphQL
+delete_transaction_rule        = false  # WRITE — mutates via raw GraphQL
+
+# ── merchants ───────────────────────────────────────────────────────────────────
+get_merchant                   = true
+update_merchant                = false  # WRITE — mutates via raw GraphQL
+review_recurring_stream        = false  # WRITE — sets review status; only its docstring says so

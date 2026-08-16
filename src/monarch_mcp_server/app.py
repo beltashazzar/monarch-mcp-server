@@ -17,8 +17,17 @@ logging.getLogger("gql.transport.aiohttp").setLevel(logging.WARNING)
 # Initialize FastMCP server
 mcp = FastMCP("Monarch Money MCP Server")
 
+# Withhold every account-mutating tool before registration. See read_only.py.
+from monarch_mcp_server.read_only import enforce  # noqa: E402
+
+_withheld, _registered = enforce(mcp)
+
 # Import tools package to trigger @mcp.tool() registration
 import monarch_mcp_server.tools  # noqa: E402, F401
+
+logger.info("tool policy: %d registered, %d withheld", len(_registered), len(_withheld))
+if _withheld:
+    logger.info("withheld: %s", ", ".join(sorted(_withheld)))
 
 # Export for `mcp run`
 app = mcp
