@@ -66,11 +66,21 @@ async def monarch_logout() -> str:
 async def check_auth_status() -> str:
     """Check if already authenticated with Monarch Money."""
     try:
-        token = secure_session.load_token()
-        if token:
-            status = "✅ Authentication token found in secure keyring storage\n"
+        # Inspect the whole session, not just load_token(). A cookie-mode session stores
+        # `cookies` + `device_uuid` and NO `token`, so a token-only check reports "not
+        # authenticated" against a session that works perfectly — which is exactly the
+        # false negative that sends you re-running login_setup.py for no reason.
+        session = secure_session.load_session()
+        if session:
+            mode = session.get("auth_mode", "token")
+            where = "system keyring" if secure_session._use_keyring else "file storage"
+            detail = {
+                "cookie": "browser session cookies",
+                "token": "session token",
+            }.get(mode, mode)
+            status = f"✅ Authenticated — {detail} found in {where} (auth_mode={mode})\n"
         else:
-            status = "❌ No authentication token found in keyring\n"
+            status = "❌ No stored session found\n"
 
         email = os.getenv("MONARCH_EMAIL")
         if email:
