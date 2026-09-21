@@ -10,3 +10,9 @@ python-dotenv>=1.0.0
 pydantic>=2.0.0
 # transitive floor — idna DoS (GHSA-65pc-fj4g-8rjx) via httpx
 idna>=3.15
+
+# Security floor: GHSA-82r6-8w77-94w6 / CVE-2026-63374 (transitive via mcp). Scanner
+# alignment, not an upgrade: both deployed venvs already run 4.14.2. osv-scanner
+# resolves an undeclared transitive to the OLDEST version satisfying the range and
+# reported that (4.9.0), so the finding was about this manifest, not the runtime.
+anyio>=4.14.2
