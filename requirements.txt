@@ -2,7 +2,18 @@
 # mcp.server.mcpserver), and app.py imports FastMCP from it. Upstream's pin is
 # open-ended, so a fresh install there breaks on import. Lift only together with
 # a port to the 2.x API.
-mcp[cli]>=1.10.0,<2
+#
+# Floor raised 1.10.0 -> 1.30.0 on 2026-11-21: OSV reports 5 GHSAs against every
+# mcp below 1.30.0 and none against it -- GHSA-84m7-p3x7-pcfv (StreamableHTTP
+# session accumulation), GHSA-w4fh-qvv9-3v23 (bearer token accepted for the wrong
+# resource server), GHSA-5h93-6whr-6q8j (HTTP client follows cross-origin redirects
+# with its headers), GHSA-qx49-fqc8-xw99 (OAuth credentials to a server-chosen
+# endpoint) and GHSA-rwrf-2pqf-9j8j (client fetches server-chosen $ref URLs). All
+# five are HTTP-transport or OAuth-client paths and we serve stdio with no listener,
+# so this is a declaration fix, not a reachable one -- and, like the anyio floor
+# below, it is what osv-scanner reads: an open >= floor resolves to the OLDEST
+# version in range. 1.30.0 is the newest 1.x, so <2 is untouched.
+mcp[cli]>=1.30.0,<2
 monarchmoneycommunity>=1.4.0
 gql>=3.4
 keyring>=24.0.0
